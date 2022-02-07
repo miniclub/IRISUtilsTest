@@ -13,7 +13,7 @@ pipeline {
       agent { label 'build'}
       steps {
         // キットの作成
-        bat 'loader -U "%%SYS" loader\\buildkit.xml utilsrc\\src IRISUtils'
+        bat 'loader -U "%%SYS" loader\\buildkit.xml src\\Test IRISUtils'
       }
     }
     stage('Archive artifacts') {
