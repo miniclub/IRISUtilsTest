@@ -2,6 +2,6 @@
     "objectscript.conn": {
         "server": "irisdev",
         "ns": "USER",
-        "active": true
+        "active": false
     }
 }
