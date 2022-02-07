@@ -2,7 +2,6 @@ pipeline {
   agent { label 'build'}
   stages {
     stage('Fetch source') {
-      agent { label 'build'}
       steps {
         checkout([$class: 'GitSCM', branches: [[name: '*/master']], 
             extensions: [[$class: 'RelativeTargetDirectory', 
@@ -10,14 +9,12 @@ pipeline {
       }
     }
     stage('Build KIT') {
-      agent { label 'build'}
       steps {
         // キットの作成
         bat 'loader -U "%%SYS" loader\\buildkit.xml src\\Test IRISUtils'
       }
     }
     stage('Archive artifacts') {
-      agent { label 'build'}
       steps {
         dir('kit') {
           archiveArtifacts artifacts: '*.xml'
