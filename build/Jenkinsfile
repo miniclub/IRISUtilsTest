@@ -1,5 +1,8 @@
 pipeline {
   agent { label 'build'}
+  environment {
+    iris_bin = 'c:\\InterSystems\\IRIS\\bin\\'
+  }
   stages {
     stage('Fetch source') {
       steps {
@@ -12,7 +15,7 @@ pipeline {
     stage('Build KIT') {
       steps {
         // キットの作成
-        bat 'c:\\InterSystems\\IRIS\\bin\\loader -U "%%SYS" loader\\buildkit.xml utilsrc\\src IRISUtils'
+        bat '%iris_bin%loader -U "%%SYS" loader\\buildkit.xml utilsrc\\src IRISUtils'
       }
     }
     stage('Archive artifacts') {
