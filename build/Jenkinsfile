@@ -12,7 +12,7 @@ pipeline {
     stage('Build KIT') {
       steps {
         // キットの作成
-        bat 'c:\\InterSystems\\IRIS\\bin\\loader -U "%%SYS" loader\\buildkit.xml src\\Test IRISUtils'
+        bat 'c:\\InterSystems\\IRIS\\bin\\loader -U "%%SYS" loader\\buildkit.xml utilsrc\\src IRISUtils'
       }
     }
     stage('Archive artifacts') {
