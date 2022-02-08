@@ -3,7 +3,7 @@ Class UnitTest.CheckClient Extends %UnitTest.TestCase
 {
 
 /// 単純な呼び出し
-Method TestSimpleArg()
+Method TestSimpleArg() As %Status
 {
     set rem=##class(Test.Client.TestIF).%New("192.168.0.63",52773)
     do $$$AssertTrue($isobject(rem),"リモート接続インスタンスが作成されたかどうか")
@@ -39,6 +39,7 @@ Method TestSimpleArg()
     do $$$AssertStatusOK(ret,"Test3呼び出し結果")
     do $$$AssertEquals(num,162.32,"参照値が正しく戻ってきたかどうか")
     do $$$AssertEquals(str,"日本語データ","参照値が戻ってきたかどうか")
+    quit $$$OK
 }
 
 }
