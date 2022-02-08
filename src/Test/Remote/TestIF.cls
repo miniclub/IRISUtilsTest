@@ -8,7 +8,6 @@ Class Test.Remote.TestIF Extends %ZComm.Common.ServerBase
 ClassMethod Test1(data As %String) As %Status
 {
     set ret=$$$OK
-    $$$KillArgs
     set $$$Args(1)=data
     set $$$Args("ret")=ret
 	quit ret
@@ -17,7 +16,6 @@ ClassMethod Test1(data As %String) As %Status
 ClassMethod Test1A(data As %String)
 {
     set ret=$$$OK
-    $$$KillArgs
     set $$$Args(1)=data
     set $$$Args("ret")=ret
 	quit
@@ -26,7 +24,6 @@ ClassMethod Test1A(data As %String)
 ClassMethod Test1B(data As %String) As %Status
 {
     set ret=$$$ERROR(5001,"エラーステータステスト")
-    $$$KillArgs
     set $$$Args(1)=data
     set $$$Args("ret")=ret
 	quit ret
@@ -35,7 +32,6 @@ ClassMethod Test1B(data As %String) As %Status
 ClassMethod Test1C(data As %String)
 {
     set ret=$$$ERROR(5001,"エラーステータステスト")
-    $$$KillArgs
     set $$$Args(1)=data
     set $$$Args("ret")=ret
 	set data=x // UNDEFエラー発生
@@ -44,10 +40,8 @@ ClassMethod Test1C(data As %String)
 
 ClassMethod Test2(data As %String, ByRef refdata As %String) As %Status
 {
-    set ret=$$$ERROR(5001,"エラーステータステスト")
-    $$$KillArgs
+    set ret=$select($length(data)>10:$$$ERROR(5001,"エラーステータステスト"),1:$$$OK)
     set $$$Args(1)=data
-    set $$$Args(2)=refdata
     set $$$Args(2)=refdata
 	set refdata="参照データ"
     set $$$Args("ret")=ret
@@ -56,15 +50,19 @@ ClassMethod Test2(data As %String, ByRef refdata As %String) As %Status
 
 ClassMethod Test3(data As %String, ByRef num As %Numeric, Output str As %String)
 {
-    set ret=$$$ERROR(5001,"エラーステータステスト")
+    set ret=$select($length(data)>10:$$$ERROR(5001,"エラーステータステスト"),1:$$$OK)
 	set str="日本語データ"
 	set num=162.32
-    $$$KillArgs
     set $$$Args(1)=data
     set $$$Args("ret")=ret
 	quit ret
 }
 
 Parameter InterfaceModule = "test";
+
+ClassMethod DeleteArgs()
+{
+    kill ^Args
+}
 
 }

@@ -1,72 +1,45 @@
 pipeline {
   agent { label 'client'}
+  environment {
+    iris_bin = 'c:\\InterSystems\\IRIS\\bin\\'
+  }
   stages {
-    stage('Exec client method') {
+    stage('Install on Server') {
       agent { label 'server'}
-      when { expression { return params.CheckBefore } }
        steps {
-        // マスターにてデータを保管する
-        dir('data') {
-          bat "loader2021 -U APP ..\\loader\\execunittest.xml ${env.WORKSPACE}\\SyncTest SyncTest:${params.TestClass}:TestAfterSyncServer"
-          junit 'result.xml'
-          stash includes: '*server.dat', name: 'server-result'
-        }
-      }
-    }
-    stage('Check Data on Client before sync') {
-      when { expression { return params.CheckBefore } }
-       steps {
-        // クライアントにてデータを取得し、比較する
-        dir('data') {
-          unstash 'server-result'
-          bat "loader2021 -U APP ..\\loader\\execunittest.xml ${env.WORKSPACE}\\SyncTest SyncTest:${params.TestClass}:TestAfterSyncClient"
-          junit 'result.xml'
-        }
-      }
-    }
-    /*stage('GetConfig') {
-       steps {
-        // マスターからデータベースをダウンロードする
-        bat 'loader2021 loader\\execmethod.xml =##class(SyncData.ODBC).ClearJournal(0,1)'
-        bat 'loader2021 loader\\execmethod.xml =##class(SyncData.ODBC).GetConfig()'
+         // 成果物をコピー
+        copyArtifacts projectName: 'build', target: 'kit'
+        // キットをインストール
+        bat '%iris_bin%loader kit\\IRISUtils.xml'
+        // テストプログラムをロード、コンパイル
+        bat 'c:\\InterSystems\\IRIS\\bin\\loader loader\\loadclass.xml src\\Test'
       }
     } 
-    stage('RestoreDB') {
+    stage('Install on client') {
+      agent { label 'client'}
        steps {
-        // マスターからデータベースをダウンロードする
-        bat 'loader2021 loader\\execmethod.xml =##class(SyncData.ODBC).RestoreDB(3)'
+         // 成果物をコピー
+        copyArtifacts projectName: 'build', target: 'kit'
+        // キットをインストール
+        bat 'c:\\InterSystems\\IRIS\\bin\\loader kit\\IRISUtils.xml'
+        // テストプログラムをロード、コンパイル
+        bat 'c:\\InterSystems\\IRIS\\bin\\loader loader\\loadclass.xml src\\Test'
       }
-    }*/ 
-    stage('Create Data on Server') {
-      agent { label 'server01'}
-      when { expression { return params.LoadData } }
-      steps {
-        // マスターにてデータを作成する
-        bat "loader2021 -U APP loader\\execunittest.xml ${env.WORKSPACE}\\SyncTest SyncTest:${params.TestClass}:TestBeforeSyncServer"
-      }
-    }
-    stage('Create Data on Client') {
-      when { expression { return params.LoadData } }
-      steps {        // クライアントにてデータを作成する
-        bat "loader2021 -U APP loader\\execunittest.xml ${env.WORKSPACE}\\SyncTest SyncTest:${params.TestClass}:TestBeforeSyncClient"
-      }
-    }
-
-    stage('Sync') {
+    } 
+    stage('Invoke client method') {
+      agent { label 'client'}
        steps {
-        // 同期実行
-        bat 'loader2021 loader\\execmethod.xml =##class(SyncData.ODBC).ServerToClient()'
-        bat 'loader2021 loader\\execmethod.xml =##class(SyncData.ODBC).ClientToServer()'
-        bat 'loader2021 loader\\execmethod.xml =##class(SyncData.ODBC).Commit()'
+        //クライアント側UnitTestを実行
+        bat 'c:\\InterSystems\\IRIS\\bin\\loader loader\\execunittest.xml src\\UnitTest:UnitTest.CheckClient'
+        junit 'result.xml'
       }
-    }
-
-    stage('Get Data on Server') {
-      agent { label 'server01'}
+    } 
+    stage('Check Data on Server') {
+      agent { label 'server'}
        steps {
         // マスターにてデータを保管する
         dir('data') {
-          bat "loader2021 -U APP ..\\loader\\execunittest.xml ${env.WORKSPACE}\\SyncTest SyncTest:${params.TestClass}:TestAfterSyncServer"
+          bat "c:\\InterSystems\\IRIS\\bin\\loader -U APP ..\\loader\\execunittest.xml ${env.WORKSPACE}\\SyncTest SyncTest:${params.TestClass}:TestAfterSyncServer"
           junit 'result.xml'
           stash includes: '*server.dat', name: 'server-result'
         }

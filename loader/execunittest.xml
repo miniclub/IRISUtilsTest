@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Export generator="IRIS" version="26" zv="IRIS for Windows (x86-64) 2021.1 (Build 215U)" ts="2022-01-04 12:42:28">
+<Routine name="zInstProc" type="INT" languagemode="0" generated="1" timestamp="66113,45731.119625"><![CDATA[
+Install() public { 
+ set ret=1
+ try {
+	 kill ^UnitTest.Result
+	 if '$data(%opt(1),root) {
+		 write "ルートフォルダが指定されていません",!
+		 set ret=$$Error^%apiOBJ(5001,"ルートフォルダが指定されていません")
+		quit
+	 }
+	 if '$data(%opt(2),dir) {
+		 write "テストフォルダが指定されていません",!
+		 set ret=$$Error^%apiOBJ(5001,"テストフォルダが指定されていません")
+		quit
+	 }
+	 // パラメータを設定し、テストを実行
+	 set ^UnitTestRoot=root
+	 do ##class(%UnitTest.Manager).RunTest(dir,,%curdir)
+	 // テスト結果の保存
+	 do ##class(%ZPM.PackageManager.Developer.UnitTest.JUnitOutput).ToFile(##class(%Library.File).NormalizeDirectory(%curdir)_"result.xml")
+ } catch {
+	 set ret=$$Error^%apiOBJ(5002,$zerror)
+ }
+ quit ret
+}
+]]></Routine>
+</Export>

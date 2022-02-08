@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Export generator="IRIS" version="26" zv="IRIS for Windows (x86-64) 2021.1 (Build 215U)" ts="2022-01-04 12:42:28">
+<Routine name="zInstProc" type="INT" languagemode="0" generated="1" timestamp="66113,45731.119625"><![CDATA[
+Install() public { 
+ set ret=1
+ try {
+	if '$get(%opt(1))="" {
+		write "パラメータにフォルダ名を指定してください",!
+		set ret=$$Error^%apiOBJ(5001,"パラメータにフォルダ名を指定してください")
+		quit
+	}
+	set dir=%curdir_"\"_%opt(1)
+	if '##class(%File).Exists(dir) {
+		write "フォルダ"_dir_"が存在しません",!
+		set ret=$$Error^%apiOBJ(5001,"ファイル"_dir_"が存在しません")
+		quit
+	}
+	set ret=$SYSTEM.OBJ.ImportDir(dir,"*.*","ck",.err,1,.list)
+ } catch {
+	 set ret=$$Error^%apiOBJ(5002,$zerror)
+ }
+ quit ret
+}
+]]></Routine>
+</Export>
+
