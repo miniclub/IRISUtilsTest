@@ -35,8 +35,7 @@ Method TestSimpleArg() As %Status
     do $$$AssertEquals(refdata,"参照データ","参照値が変更されたかどうか")
 
     set num=991.212
-    set ret=rem.Test3("12345",.num,.str)
-    do $$$AssertStatusOK(ret,"Test3呼び出し結果")
+    do rem.Test3("12345",.num,.str)
     do $$$AssertEquals(num,162.32,"参照値が正しく戻ってきたかどうか")
     do $$$AssertEquals(str,"日本語データ","参照値が戻ってきたかどうか")
     quit $$$OK
