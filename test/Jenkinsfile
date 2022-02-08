@@ -32,7 +32,7 @@ pipeline {
        steps {
         dir('client_result') {
           //クライアント側UnitTestを実行
-          bat '%iris_bin%loader -U %app_namespace% ..\\loader\\execunittest.xml ${env.WORKSPACE}\\src UnitTest:UnitTest.CheckClient'
+          bat '%iris_bin%loader -U %app_namespace% ..\\loader\\execunittest.xml %WORKSPACE%\\src UnitTest:UnitTest.CheckClient'
           junit 'result.xml'
         }
       }
@@ -42,7 +42,7 @@ pipeline {
        steps {
         // サーバにて受信したデータが正しいかをチェック
         dir('server_result') {
-          bat "%iris_bin%loader -U %app_namespace% ..\\loader\\execunittest.xml ${env.WORKSPACE}\\src UnitTest:UnitTest.CheckServer"
+          bat "%iris_bin%loader -U %app_namespace% ..\\loader\\execunittest.xml %WORKSPACE%\\src UnitTest:UnitTest.CheckServer"
           junit 'result.xml'
         }
       }
