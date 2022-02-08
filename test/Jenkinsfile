@@ -14,10 +14,8 @@ pipeline {
         bat '%iris_bin%loader kit\\IRISUtils.xml'
         // テストプログラムをロード、コンパイル
         bat '%iris_bin%loader -U %app_namespace% loader\\loadclass.xml src\\Test'
-      }
-    } 
-    stage('Install on client') {
-      agent { label 'client'}
+        // 引数データをクリア
+        bat '%iris_bin%loader -U %app_namespace% loader\\execmethod.xml ##class(Test.Remote.TestIF).DeleteArgs()'
        steps {
          // 成果物をコピー
         copyArtifacts projectName: 'build', target: 'kit'
