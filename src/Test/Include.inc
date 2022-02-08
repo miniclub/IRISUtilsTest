@@ -1,3 +1,3 @@
 ROUTINE Test.Include [Type=INC]
- #define KillArgs kill ^Args(##Expression(%classname),##expression(%methodname))
- #define Args(%arg) ^Args(##Expression(%classname),##expression(%methodname),$increment(^Args(##Expression(%classname),##expression(%methodname))),%arg)
+ #define KillArgs kill ^Args(##Expression(""_%classname_""),##expression(""_%methodname_""))
+ #define Args(%arg) ^Args(##Expression(""_%classname_""),##expression(""_%methodname_""),$increment(^Args(##Expression(""_%classname_""),##expression(""_%methodname_""))),%arg)
