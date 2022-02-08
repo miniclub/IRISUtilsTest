@@ -8,7 +8,7 @@ Method TestSimpleArg()
     set rem=##class(Test.Client.TestIF).%New("192.168.0.63",52773)
     do $$$AssertTrue($isobject(rem),"リモート接続インスタンスが作成されたかどうか")
 
-    set ret=rem.Test1("patameter")
+    set ret=rem.Test1("parameter")
     do $$$AssertStatusOK(ret,"Test1呼び出し結果")
 
     set ret=rem.Test1("日本語パラメータ")

@@ -3,44 +3,25 @@ Class UnitTest.CheckServer Extends %UnitTest.TestCase
 {
 
 /// ダウンロード前の状態チェック
-Method TestBeforeDownload()
+Method TestParameters()
 {
-    set key="" for {
-        set key=$order(^|$get(^%ZUtils.Config("SYNCNS"))|OBJ.Server(key),1,data)
-        quit:key=""
-        do $$$AssertTrue($lg(data,3)=$lg(data,4),"同期開始TranIDと同期完了TranIdが同じ")
-        do $$$AssertEquals(##class(%ZUtils.SyncData).GetStatus(key),0,"停止中かどうか")
-    }
+    do $$$AssertEquals($get(^Args("Test.Remote.TestIF","Test1",1,1)),"parameter","Test1引数チェック")
+    do $$$AssertEquals($get(^Args("Test.Remote.TestIF","Test1",1,"ret")),$$$OK,"Test1戻り値チェック")
+
+    do $$$AssertEquals($get(^Args("Test.Remote.TestIF","Test1",1,1)),"日本語パラメータ","Test1引数チェック")
+    do $$$AssertEquals($get(^Args("Test.Remote.TestIF","Test1",1,"ret")),$$$OK,"Test1戻り値チェック")
+
+    do $$$AssertEquals($get(^Args("Test.Remote.TestIF","Test1A",1,1)),"日本語データ","Test1A引数チェック")
+
+    do $$$AssertEquals($get(^Args("Test.Remote.TestIF","Test1B",1,1)),"エラーチェック関数","Test1B引数チェック")
+
+    do $$$AssertEquals($get(^Args("Test.Remote.TestIF","Test1C",1,1)),"引数データ","Test1C引数チェック")
+
+    do $$$AssertEquals($get(^Args("Test.Remote.TestIF","Test2",1,1)),"12345","Test2引数チェック")
+    do $$$AssertEquals($get(^Args("Test.Remote.TestIF","Test2",1,2)),"クライアントデータ","Test2引数チェック")
+
+    do $$$AssertEquals($get(^Args("Test.Remote.TestIF","Test3",1,1)),"12345","Test3引数チェック")
+    do $$$AssertEquals($get(^Args("Test.Remote.TestIF","Test3",1,2)),991.212,"Test3引数チェック")
 }
-/// ダウンロード後の状態チェック
-Method TestAfterDownload()
-{
-    set key="" for {
-        set key=$order(^|$get(^%ZUtils.Config("SYNCNS"))|OBJ.Server(key),1,data)
-        quit:key=""
-        do $$$AssertTrue($lg(data,3)>0&&($lg(data,3)=$lg(data,4)),"同期開始TranIDと同期完了TranIdが同じ")
-        do $$$AssertEquals(##class(%ZUtils.SyncData).GetStatus(key),1,"稼働中かどうか")
-    }
-}
-/*/// コンフィグのチェック
-Method Test2()
-{
-    do $$$LogMessage("^%ZUtils.Configに正しい値が入っているかをチェック")
-    do $$$AssertEquals($get(^%ZUtils.Config("MASTERIP")),"192.168.10.3","マスターの代表アドレス")
-    do $$$AssertEquals($get(^%ZUtils.Config("DEPLOYDBLIST")),"PGM,MASTER","配布DBリスト")
-    do $$$AssertEquals($get(^%ZUtils.Config("SYNCDBLIST")),"DATA1,DATA2","同期DBリスト")
-    do $$$AssertEquals($get(^%ZUtils.Config("SYNCNS")),"APP","同期ネームスペース")
-    do $$$AssertNotEquals($get(^%ZUtils.Config("SERVERGUID")),##class(%SYS.System).InstanceGUID(),"マスターのGUIDとクライアントのGUIDは異なっていないといけない")
-	quit
-}
-/// オブジェクト同期グローバルのチェック
-Method TestSyncSet()
-{
-    do $$$AssertEquals($get(^%ZUtils.SyncCli("SYNCNUM")),1,"同期IDチェック")
-    do $$$AssertEquals($get(^%ZUtils.SyncCli("CLIENTTRANID")),"","トランザクションIDがNULL")
-    do $$$AssertEquals($get(^%ZUtils.SyncCli("SYNCSTATUS")),0,"ステータスが0")
-    do $$$AssertEquals($data(^OBJ.SYNCC.1),0,"^OBJ.SYNC.1が無いこと")
-	quit
-}*/
 
 }

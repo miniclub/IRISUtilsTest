@@ -2,6 +2,7 @@ pipeline {
   agent { label 'client'}
   environment {
     iris_bin = 'c:\\InterSystems\\IRIS\\bin\\'
+    app_namespace = 'USER'
   }
   stages {
     stage('Install on Server') {
@@ -12,7 +13,7 @@ pipeline {
         // キットをインストール
         bat '%iris_bin%loader kit\\IRISUtils.xml'
         // テストプログラムをロード、コンパイル
-        bat 'c:\\InterSystems\\IRIS\\bin\\loader loader\\loadclass.xml src\\Test'
+        bat '%iris_bin%loader -U %app_namespace% loader\\loadclass.xml src\\Test'
       }
     } 
     stage('Install on client') {
@@ -21,40 +22,29 @@ pipeline {
          // 成果物をコピー
         copyArtifacts projectName: 'build', target: 'kit'
         // キットをインストール
-        bat 'c:\\InterSystems\\IRIS\\bin\\loader kit\\IRISUtils.xml'
+        bat '%iris_bin%loader kit\\IRISUtils.xml'
         // テストプログラムをロード、コンパイル
-        bat 'c:\\InterSystems\\IRIS\\bin\\loader loader\\loadclass.xml src\\Test'
+        bat '%iris_bin%loader -U %app_namespace% loader\\loadclass.xml src\\Test'
       }
     } 
     stage('Invoke client method') {
       agent { label 'client'}
        steps {
+        dir('client_result')
         //クライアント側UnitTestを実行
-        bat 'c:\\InterSystems\\IRIS\\bin\\loader loader\\execunittest.xml src\\UnitTest:UnitTest.CheckClient'
+        bat '%iris_bin%loader -U %app_namespace% loader\\execunittest.xml src\\UnitTest:UnitTest.CheckClient'
         junit 'result.xml'
       }
     } 
     stage('Check Data on Server') {
       agent { label 'server'}
        steps {
-        // マスターにてデータを保管する
-        dir('data') {
-          bat "c:\\InterSystems\\IRIS\\bin\\loader -U APP ..\\loader\\execunittest.xml ${env.WORKSPACE}\\SyncTest SyncTest:${params.TestClass}:TestAfterSyncServer"
-          junit 'result.xml'
-          stash includes: '*server.dat', name: 'server-result'
-        }
-      }
-    }
-    stage('Check Data on Client') {
-       steps {
-        // クライアントにてデータを取得し、比較する
-        dir('data') {
-          unstash 'server-result'
-          bat "loader2021 -U APP ..\\loader\\execunittest.xml ${env.WORKSPACE}\\SyncTest SyncTest:${params.TestClass}:TestAfterSyncClient"
+        // サーバにて受信したデータが正しいかをチェック
+        dir('server_result') {
+          bat "%iris_bin%loader -U %app_namespace% ..\\loader\\execunittest.xml src\\UnitTest:UnitTest.CheckServer"
           junit 'result.xml'
         }
       }
     }
-
   }
 }

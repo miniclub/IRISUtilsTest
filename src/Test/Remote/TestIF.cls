@@ -51,10 +51,11 @@ ClassMethod Test2(data As %String, ByRef refdata As %String) As %Status
 ClassMethod Test3(data As %String, ByRef num As %Numeric, Output str As %String)
 {
     set ret=$select($length(data)>10:$$$ERROR(5001,"エラーステータステスト"),1:$$$OK)
+    set $$$Args(1)=data
+    set $$$Args(2)=num
+    set $$$Args("ret")=ret
 	set str="日本語データ"
 	set num=162.32
-    set $$$Args(1)=data
-    set $$$Args("ret")=ret
 	quit ret
 }
 
