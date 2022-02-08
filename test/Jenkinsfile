@@ -1,5 +1,5 @@
 pipeline {
-  agent { label 'client'}
+  agent none
   environment {
     iris_bin = 'c:\\InterSystems\\IRIS\\bin\\'
     app_namespace = 'USER'
