@@ -30,10 +30,11 @@ pipeline {
     stage('Invoke client method') {
       agent { label 'client'}
        steps {
-        dir('client_result')
-        //クライアント側UnitTestを実行
-        bat '%iris_bin%loader -U %app_namespace% loader\\execunittest.xml src\\UnitTest:UnitTest.CheckClient'
-        junit 'result.xml'
+        dir('client_result') {
+          //クライアント側UnitTestを実行
+          bat '%iris_bin%loader -U %app_namespace% loader\\execunittest.xml src\\UnitTest:UnitTest.CheckClient'
+          junit 'result.xml'
+        }
       }
     } 
     stage('Check Data on Server') {
