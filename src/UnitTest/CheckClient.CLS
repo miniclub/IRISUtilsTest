@@ -19,7 +19,7 @@ Method TestSimpleArg() As %Status
 
     // エラーを返す関数
     set ret=rem.Test1B("エラーチェック関数")
-    do $$$AssertStatusOK(ret,"Test1B呼び出し結果")
+    do $$$AssertStatusNotOK(ret,"Test1B呼び出し結果")
 
     try {
         set ret=$$$OK
