@@ -5,7 +5,7 @@ pipeline {
     app_namespace = 'USER'
   }
   stages {
-    stage('Install on Server') {
+    stage('Install kit on Server') {
       agent { label 'server'}
        steps {
          // 成果物をコピー
@@ -18,7 +18,7 @@ pipeline {
         bat '%iris_bin%loader -U %app_namespace% loader\\execmethod.xml ##class(Test.Remote.TestIF).DeleteArgs()'
       }
     } 
-    stage('Install on client') {
+    stage('Install kit on client') {
       agent { label 'client'}
        steps {
          // 成果物をコピー

@@ -8,8 +8,8 @@ pipeline {
       steps {
         checkout([$class: 'GitSCM', branches: [[name: '*/master']], 
             extensions: [[$class: 'RelativeTargetDirectory', 
-            relativeTargetDir: 'utilsrc']], userRemoteConfigs: [[credentialsId: 'github-certificate', url: 'https://github.com/miniclub/IRISUtils']]])
-            //relativeTargetDir: 'utilsrc']], userRemoteConfigs: [[ url: 'https://github.com/miniclub/IRISUtils']]])
+            relativeTargetDir: 'utilsrc']], userRemoteConfigs: [[credentialsId: 'github-certificate', 
+            url: 'https://github.com/miniclub/IRISUtils']]])
       }
     }
     stage('Build KIT') {
