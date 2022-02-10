@@ -17,7 +17,7 @@ Method OnBeforeAllTests() As %Status
 /// Test1
 Method Test1()
 {
-    set ret=rem.Test1("parameter")
+    set ret=..rem.Test1("parameter")
     do $$$AssertStatusOK(ret,"Test1呼び出し結果")
 }
 
@@ -25,7 +25,7 @@ Method Test1()
 /// 日本語パラメータ
 Method Test1Jp()
 {
-    set ret=rem.Test1("日本語パラメータ")
+    set ret=..rem.Test1("日本語パラメータ")
     do $$$AssertStatusOK(ret,"Test1呼び出し結果")
 }
 
@@ -33,13 +33,13 @@ Method Test1Jp()
 /// 戻り値のない関数
 Method Test1A()
 {
-    do rem.Test1A("日本語データ")
+    do ..rem.Test1A("日本語データ")
 }
 
 /// エラーを返す関数
 Method Test1B()
 {
-    set ret=rem.Test1B("エラーチェック関数")
+    set ret=..rem.Test1B("エラーチェック関数")
     do $$$AssertStatusNotOK(ret,"Test1B呼び出し結果")
 }
 
@@ -48,7 +48,7 @@ Method Test1C()
 {
     try {
         set ret=$$$OK
-        do rem.Test1C("引数データ")
+        do ..rem.Test1C("引数データ")
     } catch err {
         set ret=err.AsStatus()
     }
@@ -59,7 +59,7 @@ Method Test1C()
 Method Test2()
 {
     set refdata="クライアントデータ"
-    set ret=rem.Test2("12345",.refdata)
+    set ret=..rem.Test2("12345",.refdata)
     do $$$AssertStatusOK(ret,"Test2呼び出し結果")
     do $$$AssertEquals(refdata,"参照データ","参照値が変更されたかどうか")
 }
@@ -68,7 +68,7 @@ Method Test2()
 Method Test3()
 {
     set num=991.212
-    do rem.Test3("12345",.num,.str)
+    do ..rem.Test3("12345",.num,.str)
     do $$$AssertEquals(num,162.32,"参照値が正しく戻ってきたかどうか")
     do $$$AssertEquals(str,"日本語データ","参照値が戻ってきたかどうか")
 }
