@@ -40,7 +40,7 @@ Method Test1A()
 Method Test1B()
 {
     set ret=..rem.Test1B("エラーチェック関数")
-    do $$$AssertStatusOK(ret,"Test1B呼び出し結果")
+    do $$$AssertStatusNotOK(ret,"Test1B呼び出し結果")
 }
 
 /// エラートラップが発生する関数
@@ -48,7 +48,7 @@ Method Test1C()
 {
     try {
         set ret=$$$OK
-        do ..rem.Test1C("引数データx")
+        do ..rem.Test1C("引数データ")
     } catch err {
         set ret=err.AsStatus()
     }
