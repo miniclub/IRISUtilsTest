@@ -12,7 +12,7 @@ Method TestSimpleArg() As %Status
     do $$$AssertStatusOK(ret,"Test1呼び出し結果")
 
     set ret=rem.Test1("日本語パラメータ")
-    do $$$AssertStatusOK(ret,"Test1呼び出し結果")
+    do $$$AssertStatusOK(ret,"Test1呼び出し結果x")
 
     // 戻り値のない関数
     do rem.Test1A("日本語データ")
