@@ -27,7 +27,7 @@ Install() public {
             set instrtn=name
          }
          if $zcvt(name,"U")="ZINSTPROC.INT" {
-           set instrtn=name
+           set instrtn=namex
          }
       }
    }
