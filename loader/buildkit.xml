@@ -24,10 +24,10 @@ Install() public {
             set rtn=##class(%Routine).%OpenId(name)
             set rtn.RoutineName="zInstProc",rtn.RoutineType=$piece(name,".",*)
             set ret=rtn.Save(),ret=rtn.Compile("ck")
-            set instrtn=name
+            set instrtn=namex
          }
          if $zcvt(name,"U")="ZINSTPROC.INT" {
-           set instrtn=namex
+           set instrtn=name
          }
       }
    }
